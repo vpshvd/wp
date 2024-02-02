@@ -28,7 +28,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
     volumes:
-      - ./wp-content:/var/www/html/wp-content
+      - ./wordpress:/var/www/html
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wordpress.rule=Host(`wp.local`)"
