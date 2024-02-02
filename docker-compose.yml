@@ -1,0 +1,69 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: wp_db
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    ports:
+      - "3306:3306"
+    networks:
+      - wp_network
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    container_name: wp_app
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`wp.local`)"
+      - "traefik.http.routers.wordpress.entrypoints=websecure"
+      - "traefik.http.routers.wordpress.tls=true"
+    networks:
+      - wp_network
+
+  traefik:
+    image: traefik:v2.4
+    container_name: traefik
+    command:
+      - "--api=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker=true"
+      - "--providers.file.filename=/etc/traefik/traefik_dynamic.toml"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./certs/wp.local.pem:/certs/wp.local.pem"
+      - "./certs/wp.local-key.pem:/certs/wp.local-key.pem"
+      - "./traefik_dynamic.toml:/etc/traefik/traefik_dynamic.toml"
+    labels:
+      - "traefik.http.routers.traefik.rule=Host(`monitor.local`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+    networks:
+      - wp_network
+
+networks:
+  wp_network:
+    name: wp_network
+
+volumes:
+  db_data:
