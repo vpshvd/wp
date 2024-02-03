@@ -2,8 +2,8 @@
 wordpress/*
 wordpress/wp-admin/
 wordpress/wp-includes/
-wordpress/wp-content/index.php
 !wordpress/wp-content
+wordpress/wp-content/index.php
 wordpress/wp-content/themes/twenty*
 wordpress/wp-content/themes/index.php
 wordpress/wp-content/plugins/akismet
