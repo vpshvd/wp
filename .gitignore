@@ -1,11 +1,22 @@
-.idea/
+# Ignore everything in the root folder
 wordpress/*
-wordpress/wp-admin/
-wordpress/wp-includes/
+
+# Whitelist wp-content but ignore everything inside
 !wordpress/wp-content
-wordpress/wp-content/index.php
+wordpress/wp-content/*
+
+# Whitelist the themes and plugins directories
+!wordpress/wp-content/themes
+!wordpress/wp-content/plugins
+
+# Exclude default themes and plugins
 wordpress/wp-content/themes/twenty*
-wordpress/wp-content/themes/index.php
 wordpress/wp-content/plugins/akismet
-wordpress/wp-content/plugins/index.php
 wordpress/wp-content/plugins/hello.php
+
+# Exclude index.php files in themes and plugins folders
+wordpress/wp-content/themes/index.php
+wordpress/wp-content/plugins/index.php
+
+# Exclude IDE specific files
+.idea/
