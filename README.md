@@ -19,12 +19,6 @@ docker-compose up -d
 mkdir certs && cd certs && mkcert wp.local
 ```
 
-## Permissions (for local development)
-```bash
-sudo chown -R $USER:$USER ./wordpress
-
-```
-
 ## The site and traefik dashboard
 wp: https://wp.local/  
 traefik: http://monitor.local  
